@@ -1,0 +1,65 @@
+{
+   "abstract" : "Convert cpan distribution from BackPAN to a git repository",
+   "author" : [
+      "Graham Ollis <plicease@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132661",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "App-cpangitify",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.30"
+         }
+      },
+      "runtime" : {
+         "recommends" : {
+            "JSON::XS" : "0",
+            "PerlX::Maybe::XS" : "0"
+         },
+         "requires" : {
+            "BackPAN::Index" : "0",
+            "File::Copy::Recursive" : "0",
+            "File::chdir" : "0",
+            "Git::Wrapper" : "0",
+            "IPC::System::Simple" : "0",
+            "JSON" : "0",
+            "LWP::UserAgent" : "0",
+            "Path::Class" : "0",
+            "PerlX::Maybe" : "0",
+            "URI" : "0",
+            "autodie" : "0",
+            "perl" : "v5.10.0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Capture::Tiny" : "0",
+            "File::HomeDir" : "0",
+            "Test::More" : "0",
+            "URI::file" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/plicease/app-cpangitify/issues"
+      },
+      "homepage" : "http://perl.wdlabs.com/App-cpangitify/",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/plicease/app-cpangitify.git",
+         "web" : "https://github.com/plicease/app-cpangitify"
+      }
+   },
+   "version" : "0.04"
+}
+

@@ -1,0 +1,14 @@
+Revision history for App-cpangitify
+
+0.04      2013-10-09 20:29:45 -0400
+  - change name to cpangitify
+  - handle distros with name changes
+
+0.03      2013-10-09 15:43:54 -0400
+  - documentation
+
+0.02      2013-10-09 13:57:30 -0400
+  - include date and author info from cpan
+
+0.01      2013-10-09 12:58:19 -0400
+  - initial version
