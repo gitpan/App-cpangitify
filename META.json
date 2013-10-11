@@ -4,7 +4,7 @@
       "Graham Ollis <plicease@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132661",
+   "generated_by" : "Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132830",
    "license" : [
       "perl_5"
    ],
@@ -48,7 +48,7 @@
          }
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/plicease/app-cpangitify/issues"
@@ -60,6 +60,6 @@
          "web" : "https://github.com/plicease/app-cpangitify"
       }
    },
-   "version" : "0.04"
+   "version" : "0.04_01"
 }
 
