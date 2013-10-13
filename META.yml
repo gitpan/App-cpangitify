@@ -36,4 +36,4 @@ resources:
   bugtracker: https://github.com/plicease/app-cpangitify/issues
   homepage: http://perl.wdlabs.com/App-cpangitify/
   repository: git://github.com/plicease/app-cpangitify.git
-version: 0.05
+version: 0.06
