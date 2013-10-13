@@ -22,7 +22,7 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "App::cpangitify",
   "PREREQ_PM" => {
-    "BackPAN::Index" => 0,
+    "BackPAN::Index" => "0.41",
     "File::Copy::Recursive" => 0,
     "File::chdir" => 0,
     "Git::Wrapper" => 0,
@@ -40,7 +40,7 @@ my %WriteMakefileArgs = (
     "Test::More" => 0,
     "URI::file" => 0
   },
-  "VERSION" => "0.04_01",
+  "VERSION" => "0.05",
   "test" => {
     "TESTS" => "t/*.t"
   }
