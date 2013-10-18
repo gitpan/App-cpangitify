@@ -4,7 +4,7 @@
       "Graham Ollis <plicease@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132661",
+   "generated_by" : "Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132830",
    "license" : [
       "perl_5"
    ],
@@ -16,7 +16,9 @@
    "prereqs" : {
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.30"
+            "ExtUtils::MakeMaker" : "6.30",
+            "Git::Wrapper" : "0",
+            "Sort::Versions" : "0"
          }
       },
       "runtime" : {
@@ -60,6 +62,6 @@
          "web" : "https://github.com/plicease/app-cpangitify"
       }
    },
-   "version" : "0.06"
+   "version" : "0.07"
 }
 

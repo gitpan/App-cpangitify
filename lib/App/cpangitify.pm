@@ -18,7 +18,7 @@ use PerlX::Maybe qw( maybe );
 use File::Copy::Recursive qw( rcopy );
 
 # ABSTRACT: Convert cpan distribution from BackPAN to a git repository
-our $VERSION = '0.06'; # VERSION
+our $VERSION = '0.07'; # VERSION
 
 
 our $ua  = LWP::UserAgent->new;
@@ -190,7 +190,7 @@ App::cpangitify - Convert cpan distribution from BackPAN to a git repository
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 DESCRIPTION
 

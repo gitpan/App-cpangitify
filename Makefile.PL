@@ -13,7 +13,9 @@ my %WriteMakefileArgs = (
   "AUTHOR" => "Graham Ollis <plicease\@cpan.org>",
   "BUILD_REQUIRES" => {},
   "CONFIGURE_REQUIRES" => {
-    "ExtUtils::MakeMaker" => "6.30"
+    "ExtUtils::MakeMaker" => "6.30",
+    "Git::Wrapper" => 0,
+    "Sort::Versions" => 0
   },
   "DISTNAME" => "App-cpangitify",
   "EXE_FILES" => [
@@ -40,7 +42,7 @@ my %WriteMakefileArgs = (
     "Test::More" => 0,
     "URI::file" => 0
   },
-  "VERSION" => "0.06",
+  "VERSION" => "0.07",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -75,6 +77,15 @@ unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+
+use Git::Wrapper;
+use Sort::Versions qw( versioncmp );
+
+if ( versioncmp( Git::Wrapper->new(".")->version , '1.5.0') eq -1 ) {
+  print "git version 1.5.0 or better is required\n";
+  exit 2;
+}
 
 WriteMakefile(%WriteMakefileArgs);
 

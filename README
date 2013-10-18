@@ -2,7 +2,7 @@ NAME
     cpangitify - Convert cpan distribution from BackPAN to a git repository
 
 VERSION
-    version 0.06
+    version 0.07
 
 SYNOPSIS
      % cpangitify Foo::Bar
