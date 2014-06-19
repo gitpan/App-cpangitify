@@ -3,39 +3,41 @@ abstract: 'Convert cpan distribution from BackPAN to a git repository'
 author:
   - 'Graham Ollis <plicease@cpan.org>'
 build_requires:
-  Capture::Tiny: 0
-  File::HomeDir: 0
-  Test::More: 0
-  URI::file: 0
+  Capture::Tiny: '0'
+  File::HomeDir: '0.91'
+  Module::Build: '0.3601'
+  Test::More: '0.94'
+  URI::file: '0'
 configure_requires:
-  ExtUtils::MakeMaker: 6.30
-  Git::Wrapper: 0
-  Sort::Versions: 0
+  Git::Wrapper: '0'
+  Module::Build: '0.3601'
+  Sort::Versions: '0'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132830'
+generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.141520'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: App-cpangitify
 recommends:
-  JSON::XS: 0
-  PerlX::Maybe::XS: 0
+  JSON::XS: '0'
+  PerlX::Maybe::XS: '0'
 requires:
-  BackPAN::Index: 0.41
-  File::Copy::Recursive: 0
-  File::chdir: 0
-  Git::Wrapper: 0
-  IPC::System::Simple: 0
-  JSON: 0
-  LWP::UserAgent: 0
-  Path::Class: 0
-  PerlX::Maybe: 0
-  URI: 0
-  autodie: 0
+  Archive::Extract: '0'
+  BackPAN::Index: '0.41'
+  File::Copy::Recursive: '0'
+  File::chdir: '0'
+  Git::Wrapper: '0'
+  IPC::System::Simple: '0'
+  JSON: '0'
+  LWP::UserAgent: '0'
+  Path::Class: '0.26'
+  PerlX::Maybe: '0.003'
+  URI: '0'
+  autodie: '0'
   perl: v5.10.0
 resources:
-  bugtracker: https://github.com/plicease/app-cpangitify/issues
-  homepage: http://perl.wdlabs.com/App-cpangitify/
-  repository: git://github.com/plicease/app-cpangitify.git
-version: 0.07
+  bugtracker: https://github.com/plicease/App-cpangitify/issues
+  homepage: http://perl.wdlabs.com/App-cpangitify
+  repository: git://github.com/plicease/App-cpangitify.git
+version: '0.09'

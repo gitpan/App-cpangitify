@@ -16,13 +16,28 @@ use JSON qw( from_json );
 use URI;
 use PerlX::Maybe qw( maybe );
 use File::Copy::Recursive qw( rcopy );
+use File::Basename qw( basename );
+use Archive::Extract;
+use File::Spec;
 
 # ABSTRACT: Convert cpan distribution from BackPAN to a git repository
-our $VERSION = '0.07'; # VERSION
+our $VERSION = '0.09'; # VERSION
 
 
 our $ua  = LWP::UserAgent->new;
 our $opt_metacpan_url;
+
+sub _rm_rf
+{
+  my($file) = @_;
+  
+  if($file->is_dir && ! -l $file)
+  {
+    _rm_rf($_) for $file->children;
+  }
+  
+  $file->remove || die "unable to delete $file";
+}
 
 sub main
 {
@@ -114,7 +129,7 @@ sub main
     local $CWD = $tmp->stringify;
   
     my $uri = URI->new(join('/', $opt_backpan_url, $path));
-    say "fetch ...";
+    say "fetch ... $uri";
     my $res = $ua->get($uri);
     unless($res->is_success)
     {
@@ -124,14 +139,18 @@ sub main
     }
   
     do {
-      open my $fh, '>', "archive";
+      my $fn = basename $uri->path;
+    
+      open my $fh, '>', $fn;
       print $fh $res->decoded_content;
       close $fh;
-    };
+
+      say "unpack... $fn";
+      my $archive = Archive::Extract->new( archive => $fn );
+      $archive->extract( to => File::Spec->curdir ) || die $archive->error;
+      unlink $fn;
   
-    say "unpack...";
-    system 'tar', 'xf', 'archive';
-    unlink 'archive';
+    };
   
     my $source = do {
       my @children = map { $_->absolute } dir()->children;
@@ -149,7 +168,7 @@ sub main
     foreach my $child ($dest->children)
     {
       next if $child->basename eq '.git';
-      system 'rm', '-rf', $child;
+      _rm_rf($child);
     }
   
     foreach my $child ($source->children)
@@ -172,7 +191,8 @@ sub main
       date    => "$date +0000",
       author  => author $cpanid,
     });
-    $git->tag($version);
+    eval { $git->tag($version) };
+    warn $@ if $@;
   }
   
   return 0;
@@ -184,13 +204,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 App::cpangitify - Convert cpan distribution from BackPAN to a git repository
 
 =head1 VERSION
 
-version 0.07
+version 0.09
 
 =head1 DESCRIPTION
 

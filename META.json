@@ -4,7 +4,7 @@
       "Graham Ollis <plicease@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132830",
+   "generated_by" : "Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.141520",
    "license" : [
       "perl_5"
    ],
@@ -14,10 +14,15 @@
    },
    "name" : "App-cpangitify",
    "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.30",
             "Git::Wrapper" : "0",
+            "Module::Build" : "0.3601",
             "Sort::Versions" : "0"
          }
       },
@@ -27,6 +32,7 @@
             "PerlX::Maybe::XS" : "0"
          },
          "requires" : {
+            "Archive::Extract" : "0",
             "BackPAN::Index" : "0.41",
             "File::Copy::Recursive" : "0",
             "File::chdir" : "0",
@@ -34,8 +40,8 @@
             "IPC::System::Simple" : "0",
             "JSON" : "0",
             "LWP::UserAgent" : "0",
-            "Path::Class" : "0",
-            "PerlX::Maybe" : "0",
+            "Path::Class" : "0.26",
+            "PerlX::Maybe" : "0.003",
             "URI" : "0",
             "autodie" : "0",
             "perl" : "v5.10.0"
@@ -44,8 +50,8 @@
       "test" : {
          "requires" : {
             "Capture::Tiny" : "0",
-            "File::HomeDir" : "0",
-            "Test::More" : "0",
+            "File::HomeDir" : "0.91",
+            "Test::More" : "0.94",
             "URI::file" : "0"
          }
       }
@@ -53,15 +59,15 @@
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/plicease/app-cpangitify/issues"
+         "web" : "https://github.com/plicease/App-cpangitify/issues"
       },
-      "homepage" : "http://perl.wdlabs.com/App-cpangitify/",
+      "homepage" : "http://perl.wdlabs.com/App-cpangitify",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/plicease/app-cpangitify.git",
-         "web" : "https://github.com/plicease/app-cpangitify"
+         "url" : "git://github.com/plicease/App-cpangitify.git",
+         "web" : "https://github.com/plicease/App-cpangitify"
       }
    },
-   "version" : "0.07"
+   "version" : "0.09"
 }
 
