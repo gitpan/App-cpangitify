@@ -28,18 +28,17 @@
       },
       "runtime" : {
          "recommends" : {
-            "JSON::XS" : "0",
             "PerlX::Maybe::XS" : "0"
          },
          "requires" : {
             "Archive::Extract" : "0",
-            "BackPAN::Index" : "0.41",
+            "CPAN::ReleaseHistory" : "0",
             "File::Copy::Recursive" : "0",
             "File::chdir" : "0",
             "Git::Wrapper" : "0",
+            "HTTP::Tiny" : "0",
             "IPC::System::Simple" : "0",
-            "JSON" : "0",
-            "LWP::UserAgent" : "0",
+            "JSON::PP" : "0",
             "Path::Class" : "0.26",
             "PerlX::Maybe" : "0.003",
             "URI" : "0",
@@ -51,6 +50,7 @@
          "requires" : {
             "Capture::Tiny" : "0",
             "File::HomeDir" : "0.91",
+            "HTTP::Date" : "0",
             "Test::More" : "0.94",
             "URI::file" : "0"
          }
@@ -68,6 +68,6 @@
          "web" : "https://github.com/plicease/App-cpangitify"
       }
    },
-   "version" : "0.09"
+   "version" : "0.10"
 }
 

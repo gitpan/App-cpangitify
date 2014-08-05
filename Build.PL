@@ -20,23 +20,22 @@ my %module_build_args = (
     "Graham Ollis <plicease\@cpan.org>"
   ],
   "dist_name" => "App-cpangitify",
-  "dist_version" => "0.09",
+  "dist_version" => "0.10",
   "license" => "perl",
   "module_name" => "App::cpangitify",
   "recommends" => {
-    "JSON::XS" => 0,
     "PerlX::Maybe::XS" => 0
   },
   "recursive_test_files" => 1,
   "requires" => {
     "Archive::Extract" => 0,
-    "BackPAN::Index" => "0.41",
+    "CPAN::ReleaseHistory" => 0,
     "File::Copy::Recursive" => 0,
     "File::chdir" => 0,
     "Git::Wrapper" => 0,
+    "HTTP::Tiny" => 0,
     "IPC::System::Simple" => 0,
-    "JSON" => 0,
-    "LWP::UserAgent" => 0,
+    "JSON::PP" => 0,
     "Path::Class" => "0.26",
     "PerlX::Maybe" => "0.003",
     "URI" => 0,
@@ -49,6 +48,7 @@ my %module_build_args = (
   "test_requires" => {
     "Capture::Tiny" => 0,
     "File::HomeDir" => "0.91",
+    "HTTP::Date" => 0,
     "Test::More" => "0.94",
     "URI::file" => 0
   }
@@ -58,6 +58,7 @@ my %module_build_args = (
 my %fallback_build_requires = (
   "Capture::Tiny" => 0,
   "File::HomeDir" => "0.91",
+  "HTTP::Date" => 0,
   "Module::Build" => "0.3601",
   "Test::More" => "0.94",
   "URI::file" => 0

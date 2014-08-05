@@ -4,27 +4,27 @@ use strict;
 use warnings;
 use autodie qw( :system );
 use v5.10;
-use BackPAN::Index;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
 use Path::Class qw( file dir );
 use Git::Wrapper;
 use File::Temp qw( tempdir );
-use LWP::UserAgent;
 use File::chdir;
-use JSON qw( from_json );
+use JSON::PP qw( decode_json );
 use URI;
 use PerlX::Maybe qw( maybe );
 use File::Copy::Recursive qw( rcopy );
 use File::Basename qw( basename );
 use Archive::Extract;
 use File::Spec;
+use CPAN::ReleaseHistory;
+use HTTP::Tiny;
 
 # ABSTRACT: Convert cpan distribution from BackPAN to a git repository
-our $VERSION = '0.09'; # VERSION
+our $VERSION = '0.10'; # VERSION
 
 
-our $ua  = LWP::UserAgent->new;
+our $ua  = HTTP::Tiny->new;
 our $opt_metacpan_url;
 
 sub _rm_rf
@@ -45,7 +45,7 @@ sub main
   local @ARGV = @_;
   
   my $opt_backpan_index_url;
-  my $opt_backpan_url = "http://backpan.perl.org";
+  my $opt_backpan_url = "http://backpan.perl.org/authors/id";
   $opt_metacpan_url   = "http://api.metacpan.org/";
 
   GetOptions(
@@ -60,6 +60,7 @@ sub main
   ) || pod2usage(1);
 
   my @names = map { s/::/-/g; $_ } @ARGV;
+  my %names = map { $_ => 1 } @names;
   my $name = $names[0];
 
   pod2usage(1) unless $name;
@@ -73,12 +74,17 @@ sub main
   }
 
   say "creating/updating index...";
-  my $bpi = BackPAN::Index->new(
-    maybe backpan_index_url => $opt_backpan_index_url,
-  );
+  my $history = CPAN::ReleaseHistory->new(
+    maybe url => $opt_backpan_index_url
+  )->release_iterator;
 
   say "searching...";
-  my @rel = eval { $bpi->releases->search({ dist => \@names }, { order_by => 'date' }) };
+  my @rel;
+  while(my $release = $history->next_release)
+  {
+    next unless $names{$release->distinfo->dist};
+    push @rel, $release;
+  }
 
   if($@ || @rel == 0)
   {
@@ -103,13 +109,13 @@ sub main
     {
       my $uri = URI->new($opt_metacpan_url . "v0/author/" . $cpanid);
       my $res = $ua->get($uri);
-      unless($res->is_success)
+      unless($res->{success})
       {
         say "error fetching $uri";
-        say $res->status_line;
+        say $res->{reason};
         return 2;
       }
-      $cache->{$cpanid} = from_json($res->decoded_content)
+      $cache->{$cpanid} = decode_json($res->{content})
     }
   
     sprintf "%s <%s>", $cache->{$cpanid}->{name}, $cache->{$cpanid}->{email}->[0];
@@ -118,9 +124,9 @@ sub main
   foreach my $rel (@rel)
   {
     my $path    = $rel->path;
-    my $version = $rel->version;
-    my $date    = $rel->date;
-    my $cpanid  = $rel->cpanid;
+    my $version = $rel->distinfo->version;
+    my $time    = $rel->timestamp;
+    my $cpanid  = $rel->distinfo->cpanid;
   
     say "$path [ $version ]";
   
@@ -131,10 +137,10 @@ sub main
     my $uri = URI->new(join('/', $opt_backpan_url, $path));
     say "fetch ... $uri";
     my $res = $ua->get($uri);
-    unless($res->is_success)
+    unless($res->{success})
     {
       say "error fetching $uri";
-      say $res->status_line;
+      say $res->{reason};
       return 2;
     }
   
@@ -142,7 +148,8 @@ sub main
       my $fn = basename $uri->path;
     
       open my $fh, '>', $fn;
-      print $fh $res->decoded_content;
+      binmode $fh;
+      print $fh $res->{content};
       close $fh;
 
       say "unpack... $fn";
@@ -188,7 +195,7 @@ sub main
     $git->rm($_->from) for grep { $_->mode eq 'deleted' } $git->status->get('changed');
     $git->commit({
       message => "version $version",
-      date    => "$date +0000",
+      date    => "$time +0000",
       author  => author $cpanid,
     });
     eval { $git->tag($version) };
@@ -212,7 +219,7 @@ App::cpangitify - Convert cpan distribution from BackPAN to a git repository
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 

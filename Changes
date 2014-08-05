@@ -1,5 +1,14 @@
 Revision history for App-cpangitify
 
+0.10      2014-08-05 13:22:41 -0400
+  - use HTTP::Tiny instead of LWP
+    the former being part of the core as of Perl 5.14
+  - use JSON::PP instead of JSON
+    the former being part of the core as of Perl 5.14
+  - use CPAN::ReleaseHistory instead of BackPAN::Index
+    the latter may (?) be faster,
+    but the former has lighter set of prereqs
+
 0.09      2014-06-19 16:05:18 -0400
   - CPAN release (0.08 never made it to CPAN)
 
