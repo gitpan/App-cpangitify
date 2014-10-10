@@ -21,7 +21,7 @@ use CPAN::ReleaseHistory;
 use HTTP::Tiny;
 
 # ABSTRACT: Convert cpan distribution from BackPAN to a git repository
-our $VERSION = '0.10'; # VERSION
+our $VERSION = '0.11'; # VERSION
 
 
 our $ua  = HTTP::Tiny->new;
@@ -191,8 +191,8 @@ sub main
     }
   
     say "commit and tag...";
-    $git->add('.');
     $git->rm($_->from) for grep { $_->mode eq 'deleted' } $git->status->get('changed');
+    $git->add('.');
     $git->commit({
       message => "version $version",
       date    => "$time +0000",
@@ -219,7 +219,7 @@ App::cpangitify - Convert cpan distribution from BackPAN to a git repository
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 

@@ -6,15 +6,15 @@ build_requires:
   Capture::Tiny: '0'
   File::HomeDir: '0.91'
   HTTP::Date: '0'
-  Module::Build: '0.3601'
+  Module::Build: '0.28'
   Test::More: '0.94'
   URI::file: '0'
 configure_requires:
   Git::Wrapper: '0'
-  Module::Build: '0.3601'
+  Module::Build: '0.28'
   Sort::Versions: '0'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.141520'
+generated_by: 'Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.142690'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -40,4 +40,4 @@ resources:
   bugtracker: https://github.com/plicease/App-cpangitify/issues
   homepage: http://perl.wdlabs.com/App-cpangitify
   repository: git://github.com/plicease/App-cpangitify.git
-version: '0.10'
+version: '0.11'
