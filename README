@@ -4,7 +4,7 @@ NAME
 
 VERSION
 
-    version 0.11
+    version 0.12
 
 SYNOPSIS
 
@@ -31,6 +31,37 @@ DESCRIPTION
      % cpangitify Mojolicious::Plugin::TtRenderer MojoX::Renderer::TT
 
 OPTIONS
+
+ --resume
+
+    Resume the import from CPAN. Note that any local changes will be
+    overwritten by the CPAN upstream (your modifications will remain in the
+    repository history).
+
+ --output | -o directory
+
+    Creat the new repository in the given directory.
+
+ --skip version
+
+    Skip the given versions. Can be specified multiple times and can be
+    provided as a comma separated list.
+
+ --trace
+
+    Print each git command before it is executed.
+
+ --backpan_index_url
+
+    The URL to use for the BackPAN index
+
+ --backpan_url
+
+    The URL to use for BackPAN
+
+ --metacpan_url
+
+    The URL to use for metacpan.
 
  --help | -h
 

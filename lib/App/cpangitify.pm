@@ -3,7 +3,7 @@ package App::cpangitify;
 use strict;
 use warnings;
 use autodie qw( :system );
-use v5.10;
+use 5.010001;
 use Getopt::Long qw( GetOptions );
 use Pod::Usage qw( pod2usage );
 use Path::Class qw( file dir );
@@ -21,7 +21,7 @@ use CPAN::ReleaseHistory;
 use HTTP::Tiny;
 
 # ABSTRACT: Convert cpan distribution from BackPAN to a git repository
-our $VERSION = '0.11'; # VERSION
+our $VERSION = '0.12'; # VERSION
 
 
 our $ua  = HTTP::Tiny->new;
@@ -39,19 +39,59 @@ sub _rm_rf
   $file->remove || die "unable to delete $file";
 }
 
+our $_run_cb = sub {};
+our $original_run = \&Git::Wrapper::RUN;
+our $ignore_error = 0;
+our $trace = 0;
+sub _run_wrapper
+{
+  my($self,@command) = @_;
+  my @display;
+  foreach my $arg (@command)
+  {
+    if(ref($arg) eq 'HASH')
+    {
+      while(my($k,$v) = each %$arg)
+      {
+        push @display, "--$k";
+        push @display, $v =~ /\s/ ? "'$v'" : $v
+          if $v ne '1'; # yes there is a weird exception for this :P
+      }
+    }
+    else
+    {
+      push @display, $arg;
+    }
+  }
+  $_run_cb->($self, @display);
+  say "+ git @display" if $trace;
+  $original_run->($self, @command);
+}
+
 sub main
 {
   my $class = shift;
   local @ARGV = @_;
+  no warnings 'redefine';
+  local *Git::Wrapper::RUN = \&_run_wrapper;
+  use warnings;
   
+  my %skip;
   my $opt_backpan_index_url;
   my $opt_backpan_url = "http://backpan.perl.org/authors/id";
   $opt_metacpan_url   = "http://api.metacpan.org/";
+  my $opt_trace = 0;
+  my $opt_output;
+  my $opt_resume;
 
   GetOptions(
     'backpan_index_url=s' => \$opt_backpan_index_url,
     'backpan_url=s'       => \$opt_backpan_url,
     'metacpan_url=s'      => \$opt_metacpan_url,
+    'trace'               => \$opt_trace,
+    'skip=s'              => sub { $skip{$_} = 1 for split /,/, $_[1] },
+    'resume'              => \$opt_resume,
+    'output|o=s'          => \$opt_output,
     'help|h'              => sub { pod2usage({ -verbose => 2}) },
     'version'             => sub {
       say 'cpangitify version ', ($App::cpangitify::VERSION // 'dev');
@@ -59,17 +99,21 @@ sub main
     },
   ) || pod2usage(1);
 
+  local $trace = $opt_trace;
+
   my @names = map { s/::/-/g; $_ } @ARGV;
   my %names = map { $_ => 1 } @names;
   my $name = $names[0];
 
   pod2usage(1) unless $name;
 
-  my $dest = dir()->absolute->subdir($name);
+  my $dest = $opt_output ? dir($opt_output)->absolute : dir()->absolute->subdir($name);
 
-  if(-e $dest)
+  if(-e $dest && ! $opt_resume)
   {
     say "already exists: $dest";
+    say "you may be able to update with the --resume option";
+    say "but any local changes to your repository will be overwritten by upstream";
     return 2;
   }
 
@@ -97,7 +141,18 @@ sub main
 
   my $git = Git::Wrapper->new($dest->stringify);
 
-  $git->init;
+  if($opt_resume)
+  {
+    if($git->status->is_dirty)
+    {
+      die "the appear to be uncommited changes";
+    }
+    $skip{$_} = 1 for $git->tag;
+  }
+  else
+  {
+    $git->init;
+  }
 
   sub author($)
   {
@@ -129,6 +184,12 @@ sub main
     my $cpanid  = $rel->distinfo->cpanid;
   
     say "$path [ $version ]";
+    
+    if($skip{$version})
+    {
+      say "skipping ...";
+      next;
+    }
   
     my $tmp = dir( tempdir( CLEANUP => 1 ) );
   
@@ -156,7 +217,10 @@ sub main
       my $archive = Archive::Extract->new( archive => $fn );
       $archive->extract( to => File::Spec->curdir ) || die $archive->error;
       unlink $fn;
-  
+      if($trace)
+      {
+        say "- extract $fn $_" for @{ $archive->files };
+      }
     };
   
     my $source = do {
@@ -180,6 +244,7 @@ sub main
   
     foreach my $child ($source->children)
     {
+      next if $child->basename eq '.git';
       if(-d  $child)
       {
         rcopy($child, $dest->subdir($child->basename)) || die "unable to copy $child $!";
@@ -191,14 +256,15 @@ sub main
     }
   
     say "commit and tag...";
-    $git->rm($_->from) for grep { $_->mode eq 'deleted' } $git->status->get('changed');
     $git->add('.');
+    $git->add('-u');
     $git->commit({
-      message => "version $version",
-      date    => "$time +0000",
-      author  => author $cpanid,
+      message       => "version $version",
+      date          => "$time +0000",
+      author        => author $cpanid,
+      'allow-empty' => 1,
     });
-    eval { $git->tag($version) };
+    eval { local $ignore_error = 1; $git->tag($version) };
     warn $@ if $@;
   }
   
@@ -219,7 +285,7 @@ App::cpangitify - Convert cpan distribution from BackPAN to a git repository
 
 =head1 VERSION
 
-version 0.11
+version 0.12
 
 =head1 DESCRIPTION
 
